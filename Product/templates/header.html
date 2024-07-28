@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header</title>
+    
+    <script src="{% static 'js/header.js' %}"></script>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <a href="home">
+            <div class="header__logo">
+                <img src="{% static 'image/logo.png'%}" alt="Logo" />
+                <span>EcomSys</span>
+            </div>
+        </a>
+        <ul class="header__menu">
+            <li>
+                <a href="home">Home</a>
+            </li>
+            <li>
+                <a href="books">Book</a>
+            </li>
+            <li>
+                <a href="mobiles">Mobiles</a>
+            </li>
+            <li>
+                <a href="">Clothes</a>
+            </li>
+        </ul>
+        <ul class="header__icon">
+            <li>
+                <a href="#">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa-regular fa-heart"></i>
+                </a>
+            </li>
+            <li>
+                <a href="showCart">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </a>
+            </li>
+
+            <li id="userDropdown">
+                <script>
+                    const userDataString = "{{ request.session.user_info|escapejs }}"; 
+                    const access_token = "{{ request.session.access_token|escapejs }}"; 
+                    const refresh_token = "{{ request.session.refresh_token|escapejs }}"; 
+                    saveTokenToLocalStorage(access_token);
+                    console.log("User Info:", userDataString);
+                    console.log("Access Token:", access_token);
+                    console.log("Refresh Token:", refresh_token);
+
+                    if (userDataString) {
+                        const userData = JSON.parse(userDataString);
+                        console.log("-------------------", userData.email);
+                        document.getElementById('userDropdown').innerHTML = `
+                            <div class="user__dropdown"> 
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <div class="menu__dropdown">
+                                <h4>${userData.email}</h4>
+                                <ul>
+                                    <li><a href="#">Hồ sơ</a></li>
+                                    <li><a href="#">Mua hàng</a></li>
+                                    <li><a href="#">Thay đổi mật khẩu</a></li>
+                                    <li><a href="logout" id="logoutLink">Đăng xuất</a></li>
+                                </ul>
+                            </div>
+                        `;
+                    } else {
+                        document.getElementById('userDropdown').innerHTML = `
+                            <li class="header__authen">
+                                <a href="login">Sign in</a> /
+                                <a href="register">Sign up</a>
+                            </li>
+                        `;
+                    }
+                    function saveTokenToLocalStorage(token) {
+                        localStorage.setItem('authToken', token);
+                    }
+                    function getTokenFromLocalStorage() {
+                        return localStorage.getItem('authToken');
+                    }
+                    
+                    function removeTokenFromLocalStorage() {
+                        localStorage.removeItem('authToken');
+                    }
+
+                    const logoutLink = document.getElementById('logoutLink');
+                    logoutLink.addEventListener('click', function(event) {
+                        event.preventDefault(); 
+                        removeTokenFromLocalStorage();
+                        window.location.href = '/login';
+                    });
+
+                </script>
+                
+            </li>
+        </ul>
+    </div>
+    <!-- End Header -->
+
+    <!-- Optionally include footer content or scripts -->
+    <footer>
+        <!-- Footer content here -->
+    </footer>
+</body>
+<style>
+    .user__dropdown i {
+        font-size: 24px;
+    }
+</style>
+</html>
+

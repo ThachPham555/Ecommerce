@@ -1,0 +1,152 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header</title>
+    
+    <script src="{% static 'js/header.js' %}"></script>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <a href="home">
+            <div class="header__logo">
+                <img src="{% static 'image/logo.png'%}" alt="Logo" />
+                <span>EcomSys</span>
+            </div>
+        </a>
+        <ul class="header__menu">
+            <li>
+                <a href="home">Home</a>
+            </li>
+            <li>
+                <a href="">Book</a>
+            </li>
+            <li>
+                <a href="">Mobiles</a>
+            </li>
+            <li>
+                <a href="">Clothes</a>
+            </li>
+        </ul>
+        <ul class="header__icon">
+            <li>
+                <a href="#">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa-regular fa-heart"></i>
+                </a>
+            </li>
+            <li>
+                <!-- Use JavaScript to dynamically update cart icon and item count -->
+                <a href="showCart">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </a>
+            </li>
+
+            <li id="userDropdown">
+                <script>
+                    const userDataString = localStorage.getItem('userData');
+                    const userDropdown = document.getElementById('userDropdown');
+                
+                    if (userDataString) {
+                        // User data found in localStorage, parse it
+                        const userData = JSON.parse(userDataString);
+                
+                        userDropdown.innerHTML = `
+                            <div class="user__dropdown"> 
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <div class="menu__dropdown">
+                                <h4>${userData.fullname}</h4>
+                                <ul>
+                                    <li><a href="#">Hồ sơ</a></li>
+                                    <li><a href="#">Mua hàng</a></li>
+                                    <li><a href="#">Thay đổi mật khẩu</a></li>
+                                    <li><a href="#">Đăng xuất</a></li>
+                                </ul>
+                            </div>
+                        `;
+                    } else {
+                        userDropdown.innerHTML = `
+                            <li class="header__authen">
+                                <a href="http://127.0.0.1:8000/api/ecomSys/user/login/">Sign in</a> /
+                                <a href="http://127.0.0.1:8000/api/ecomSys/user/register/">Sign up</a>
+                            </li>
+                        `;
+                    }
+                </script>
+                
+                
+            </li>
+        </ul>
+    </div>
+    <!-- End Header -->
+
+    <!-- Optionally include footer content or scripts -->
+    <footer>
+        <!-- Footer content here -->
+    </footer>
+</body>
+
+</html>
+
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <div class="content">
+        <h1>Welcome to the Home Page</h1>
+        <div id="userDataContainer"></div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userDataString = localStorage.getItem('userData');
+            const userDataContainer = document.getElementById('userDataContainer');
+
+            if (userDataString) {
+                const userData = JSON.parse(userDataString);
+                userDataContainer.innerHTML = `
+                    <div class="user__info">
+                        <h2>Hello, ${userData.email}!</h2>
+                        <ul>
+                            <li>Email: ${userData.email}</li>
+                            <li>Role: ${userData.address}</li>
+                        </ul>
+                    </div>
+                `;
+                
+                console.log('Login successful:', userData);
+            } else {
+                console.error('User data not found in local storage');
+                userDataContainer.innerHTML = '<p>User data not found.</p>';
+            }
+        });
+    </script>
+
+</body>
+</html> {% endcomment %}
+
+
+{% comment %} <!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+</head>
+<body>
+    <h1>Welcome to the Home Page</h1>
+
+    <p>User: {{ context.user }}</p>
+    <p>Refresh Token: {{ context.refresh }}</p>
+    <p>Access Token: {{ context.access }}</p>
+</body>
+</html> {% endcomment %}
